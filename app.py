@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from langchain_groq import ChatGroq
 from youtube_transcript_api import YouTubeTranscriptApi
-
+import re 
 # Load environment variables from .env file
 load_dotenv()
 
@@ -51,11 +51,20 @@ def generate_chatgroq_content(transcript_text, prompt):
 # Streamlit App Interface
 st.title("YouTube Transcript to Detailed Notes Converter")
 youtube_link = st.text_input("Enter the YouTube Video URL:")
-
+def extract_video_id(url):
+    pattern = r"(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})"
+    match = re.search(pattern, url)
+    if match:
+        return match.group(1)
+    return None
 # Display thumbnail image if URL is provided
 if youtube_link:
-    video_id = youtube_link.split("=")[1]
-    st.image(f"https://img.youtube.com/vi/{video_id}/0.jpg",use_container_width=True)
+    video_id = extract_video_id(youtube_link)
+
+    if video_id:
+        thumbnail_url = f"https://img.youtube.com/vi/{video_id}/0.jpg"
+        st.image(thumbnail_url, use_column_width=True, caption="YouTube Thumbnail")
+
 
 if st.button("Get Detailed Notes"):
     try:
