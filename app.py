@@ -63,7 +63,7 @@ if youtube_link:
 
     if video_id:
         thumbnail_url = f"https://img.youtube.com/vi/{video_id}/0.jpg"
-        st.image(thumbnail_url, use_column_width=True, caption="YouTube Thumbnail")
+        st.image(thumbnail_url, use_container_width=True, caption="YouTube Thumbnail")
 
 
 if st.button("Get Detailed Notes"):
