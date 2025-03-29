@@ -10,7 +10,7 @@ load_dotenv()
 
 # Set wide layout first
 st.set_page_config(
-    page_title="Video Summarizer",
+    page_title="Video Summarizer with Yogesh",
     page_icon="🎥",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -21,7 +21,7 @@ GROQ_API_KEY = st.secrets["k"]["api_key"]
 chat_groq = ChatGroq(
     api_key=GROQ_API_KEY,
     model="llama-3.3-70b-specdec",
-    temperature=0,
+    temperature=.8,
     max_tokens=7096,
     timeout=None,
     max_retries=3,
@@ -61,7 +61,6 @@ def generate_chatgroq_content(transcript_text, prompt):
 
 # Streamlit App Interface
 st.title("🎥 Video Content Summarizer")
-st.caption("Powered by Groq & YouTube Transcript API")
 
 # Initialize session state
 if 'transcript_text' not in st.session_state:
