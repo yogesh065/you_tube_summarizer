@@ -86,7 +86,7 @@ with col1:
                     # Display thumbnail in right column
                     col2.image(
                         f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg",
-                        use_column_width=True,
+                        use_container_width=True,
                         caption="Video Thumbnail"
                     )
 
