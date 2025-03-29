@@ -49,7 +49,7 @@ def generate_chatgroq_content(transcript_text, prompt):
         return None
 
 # Streamlit App Interface
-st.title("YouTube Transcript to Detailed Notes Converter")
+st.title("📝 Effortlessly Summarize Videos in English, Hindi, or Marathi with Yogesh")
 youtube_link = st.text_input("Enter the YouTube Video URL:")
 def extract_video_id(url):
     pattern = r"(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})"
