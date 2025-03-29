@@ -55,7 +55,7 @@ youtube_link = st.text_input("Enter the YouTube Video URL:")
 # Display thumbnail image if URL is provided
 if youtube_link:
     video_id = youtube_link.split("=")[1]
-    st.image(f"https://img.youtube.com/vi/{video_id}/0.jpg",use_column_width="auto")
+    st.image(f"https://img.youtube.com/vi/{video_id}/0.jpg",use_container_width=True)
 
 if st.button("Get Detailed Notes"):
     try:
