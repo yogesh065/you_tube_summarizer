@@ -8,6 +8,7 @@ import os
 import datetime
 from glob import glob
 import logging
+from pathlib import Path
 logger=logging.getLogger()
 # Load environment variables from .env file
 load_dotenv()
@@ -36,30 +37,37 @@ prompt = """You are a YouTube Video Summarizer tasked with providing an in-depth
 # Add these new imports at the top
 
 
-# Add this function above your Streamlit UI code
 def save_and_manage_files(summary_content, transcript_content):
     """Save files and maintain only last 50 entries"""
-    save_dir = "saved_files"
-    os.makedirs(save_dir, exist_ok=True)
-    
-    # Create timestamp for unique filenames
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    
-    # Save summary
-    summary_filename = f"summary_{timestamp}.md"
-    with open(os.path.join(save_dir, summary_filename), 'w', encoding='utf-8') as f:
-        f.write(summary_content)
-    
-    # Save transcript
-    transcript_filename = f"transcript_{timestamp}.txt"
-    with open(os.path.join(save_dir, transcript_filename), 'w', encoding='utf-8') as f:
-        f.write(transcript_content)
-    
-    # Delete oldest files if over 50
-    all_files = sorted(glob(os.path.join(save_dir, "*")))
-    while len(all_files) > 20:
-        oldest_file = all_files.pop(0)
-        os.remove(oldest_file)
+    try:
+        save_dir = Path("saved_files")
+        save_dir.mkdir(exist_ok=True)
+        
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        # Save summary
+        summary_path = save_dir / f"summary_{timestamp}.md"
+        summary_path.write_text(summary_content, encoding='utf-8')
+        st.toast(f"Saved summary to {summary_path}", icon="💾")
+        
+        # Save transcript
+        transcript_path = save_dir / f"transcript_{timestamp}.txt"
+        transcript_path.write_text(transcript_content, encoding='utf-8')
+        st.toast(f"Saved transcript to {transcript_path}", icon="💾")
+        
+        # Cleanup old files
+        all_files = sorted(save_dir.glob("*"), key=os.path.getctime)
+        while len(all_files) > 50:
+            oldest = all_files.pop(0)
+            oldest.unlink()
+            st.toast(f"Deleted old file: {oldest.name}", icon="🗑️")
+            
+        return True
+        
+    except Exception as e:
+        st.error(f"Failed to save files: {str(e)}")
+        logger.error(f"File save error: {str(e)}")
+        return False
 
 # Function to extract video ID using regex
 def extract_video_id(url):
