@@ -60,7 +60,7 @@ def generate_chatgroq_content(transcript_text, prompt):
         return None
 
 # Streamlit App Interface
-st.title("🎥 Video Content Summarizer")
+st.title("🎥 Video Content Summarizer with Yogesh")
 
 # Initialize session state
 if 'transcript_text' not in st.session_state:
@@ -99,11 +99,12 @@ with col2:
                 summary = generate_chatgroq_content(st.session_state.transcript_text, prompt)
                 if summary:
                     st.success("Summary generated successfully!")
-                    st.write(summary)
                     st.download_button("Download Summary", summary, file_name="video_summary.md")
+
+                    st.write(summary)
             
             with tab2:
-                with st.expander("View Full Transcript", expanded=False):
+                with st.expander("View Full Transcript", expanded=True):
                     st.write(st.session_state.transcript_text)
                     st.download_button("Download Transcript", st.session_state.transcript_text, file_name="transcript.txt")
     elif submitted:
