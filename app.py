@@ -25,7 +25,7 @@ prompt = """You are a YouTube Video Summarizer tasked with providing an in-depth
 def extract_transcript_details(youtube_video_url):
     try:
         video_id = youtube_video_url.split("=")[1]
-        transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
+        transcript_list = YouTubeTranscriptApi.get_transcript(video_id,languages=("en","hi","mr"))
         
         transcript = " ".join([entry['text'] for entry in transcript_list])
         st.write("Transcript extracted successfully!\n\n", transcript)
@@ -55,16 +55,19 @@ youtube_link = st.text_input("Enter the YouTube Video URL:")
 # Display thumbnail image if URL is provided
 if youtube_link:
     video_id = youtube_link.split("=")[1]
-    st.image(f"https://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
+    st.image(f"https://img.youtube.com/vi/{video_id}/0.jpg",use_column_width="auto")
 
 if st.button("Get Detailed Notes"):
-    transcript_text = extract_transcript_details(youtube_link)
-    
-    if transcript_text:
-        summary = generate_chatgroq_content(transcript_text, prompt)
-        if summary:
-            st.markdown("## Detailed Notes:")
-            st.write(summary)
+    try:
+        transcript_text = extract_transcript_details(youtube_link)
+        
+        if transcript_text:
+            summary = generate_chatgroq_content(transcript_text, prompt)
+            if summary:
+                st.markdown("## Detailed Notes:")
+                st.write(summary)
+    except Exception as e :
+        st.write("please provide correct you tube link")
 
 st.markdown("---")
 st.write("Made By Yogesh Mane!")
