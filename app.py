@@ -77,8 +77,9 @@ if submit_button:
                 if transcript_text:
                     summary = generate_chatgroq_content(transcript_text, prompt)
                     if summary:
-                        st.markdown("## Detailed Notes:")
+                        st.markdown("## Detailed Notes with summary\n\n:")
                         st.write(summary)
+                        st.write("\n\n Text extracted from vedio\n\n",transcript_text)
     except Exception as e:
         st.error("Please provide a valid YouTube link.")
 
