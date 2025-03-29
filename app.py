@@ -24,7 +24,7 @@ prompt = """You are a YouTube Video Summarizer tasked with providing an in-depth
 # Function to extract transcript details from YouTube video
 def extract_transcript_details(youtube_video_url):
     try:
-        video_id = youtube_video_url.split("=")[1]
+        video_id =extract_video_id(youtube_video_url)
         transcript_list = YouTubeTranscriptApi.get_transcript(video_id,languages=("en","hi","mr"))
         
         transcript = " ".join([entry['text'] for entry in transcript_list])
