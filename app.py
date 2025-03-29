@@ -73,7 +73,7 @@ with col1:
     with st.container(border=True):
         st.header("Input Section")
         with st.form(key="url_form"):
-            youtube_link = st.text_input("Enter YouTube Video URL:", placeholder="https://youtube.com/watch?v=...")
+            youtube_link = st.text_input("YouTube Video URL (with subtitles):", placeholder="https://youtube.com/watch?v=...")
             submitted = st.form_submit_button("Analyze Video")
             
         if submitted and youtube_link:
