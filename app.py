@@ -7,6 +7,8 @@ import re
 import os
 import datetime
 from glob import glob
+import logging
+logger=logging.getLogger()
 # Load environment variables from .env file
 load_dotenv()
 
@@ -72,6 +74,8 @@ def extract_transcript_details(youtube_video_url):
         transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=('mr','hi','en'))
         return " ".join([entry['text'] for entry in transcript_list])
     except Exception as e:
+        logger.info("this is the error while fetching data from you tube",str(e))
+        
         st.info("Video Summarization is currently supported for Hindi, English, and Marathi languages only. Please provide a video URL with content in one of these languages.")
         return None
 
