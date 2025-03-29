@@ -57,10 +57,13 @@ def generate_chatgroq_content(transcript_text, prompt):
 
 # Streamlit App Interface
 st.title("📝 Effortlessly Summarize Videos in English, Hindi, or Marathi with Yogesh")
-youtube_link = st.text_input("Enter the YouTube Video URL:")
 
-# Automatically process when URL is entered
-if youtube_link:
+# Create a form for URL input and submission
+with st.form(key="url_form"):
+    youtube_link = st.text_input("Enter the YouTube Video URL:")
+    submit_button = st.form_submit_button(label="Submit")
+
+if submit_button:
     try:
         # Extract and display thumbnail image
         video_id = extract_video_id(youtube_link)
