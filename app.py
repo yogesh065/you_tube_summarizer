@@ -4,7 +4,9 @@ import os
 from langchain_groq import ChatGroq
 from youtube_transcript_api import YouTubeTranscriptApi
 import re
-
+import os
+import datetime
+from glob import glob
 # Load environment variables from .env file
 load_dotenv()
 
@@ -29,6 +31,33 @@ chat_groq = ChatGroq(
 
 # Prompt for summarization
 prompt = """You are a YouTube Video Summarizer tasked with providing an in-depth analysis of a video's content. Your goal is to generate a comprehensive summary that captures the main points, key arguments, and supporting details within a 750-word limit. Please thoroughly analyze the transcript text provided and offer a detailed summary, ensuring to cover all relevant aspects of the video: """
+# Add these new imports at the top
+
+
+# Add this function above your Streamlit UI code
+def save_and_manage_files(summary_content, transcript_content):
+    """Save files and maintain only last 50 entries"""
+    save_dir = "saved_files"
+    os.makedirs(save_dir, exist_ok=True)
+    
+    # Create timestamp for unique filenames
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Save summary
+    summary_filename = f"summary_{timestamp}.md"
+    with open(os.path.join(save_dir, summary_filename), 'w', encoding='utf-8') as f:
+        f.write(summary_content)
+    
+    # Save transcript
+    transcript_filename = f"transcript_{timestamp}.txt"
+    with open(os.path.join(save_dir, transcript_filename), 'w', encoding='utf-8') as f:
+        f.write(transcript_content)
+    
+    # Delete oldest files if over 50
+    all_files = sorted(glob(os.path.join(save_dir, "*")))
+    while len(all_files) > 20:
+        oldest_file = all_files.pop(0)
+        os.remove(oldest_file)
 
 # Function to extract video ID using regex
 def extract_video_id(url):
@@ -98,10 +127,13 @@ with col2:
             with tab1:
                 summary = generate_chatgroq_content(st.session_state.transcript_text, prompt)
                 if summary:
+                         # Save files to directory
+                    save_and_manage_files(summary, st.session_state.transcript_text)  # Add this line
+                    
+                    st.download_button("Download Summary", summary, file_name="video_summary.md")                    
                     st.success("Summary generated successfully!")
-                    st.download_button("Download Summary", summary, file_name="video_summary.md")
-
                     st.write(summary)
+
             
             with tab2:
                 with st.expander("View Full Transcript", expanded=True):
