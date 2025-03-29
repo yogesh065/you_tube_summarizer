@@ -34,7 +34,7 @@ def extract_video_id(url):
 def extract_transcript_details(youtube_video_url):
     try:
         video_id = extract_video_id(youtube_video_url)
-        transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=("en", "hi", "mr"))
+        transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=('mr','hi','en'))
         transcript = " ".join([entry['text'] for entry in transcript_list])
         st.write("Transcript extracted successfully!")
         return transcript
