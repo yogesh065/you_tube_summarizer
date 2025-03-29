@@ -48,12 +48,10 @@ def save_and_manage_files(summary_content, transcript_content):
         # Save summary
         summary_path = save_dir / f"summary_{timestamp}.md"
         summary_path.write_text(summary_content, encoding='utf-8')
-        st.toast(f"Saved summary to {summary_path}", icon="💾")
         
         # Save transcript
         transcript_path = save_dir / f"transcript_{timestamp}.txt"
         transcript_path.write_text(transcript_content, encoding='utf-8')
-        st.toast(f"Saved transcript to {transcript_path}", icon="💾")
         
         # Cleanup old files
         all_files = sorted(save_dir.glob("*"), key=os.path.getctime)
