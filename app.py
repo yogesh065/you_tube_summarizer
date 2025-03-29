@@ -32,7 +32,7 @@ def extract_transcript_details(youtube_video_url):
         return transcript
         
     except Exception as e:
-        st.error(f"Error extracting transcript: {e}")
+        st.info("Video Summarization is currently supported for Hindi, English, and Marathi languages only. Please provide a video URL with content in one of these languages.")
         return None
 
 # Function to generate summary using ChatGroq
